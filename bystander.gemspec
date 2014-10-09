@@ -12,5 +12,9 @@ Gem::Specification.new do |gem|
   gem.version       = Bystander::VERSION
 
   gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'mocha'
+
+  gem.add_dependency 'slack-notifier', '~> 0.6.0'
 end
 
