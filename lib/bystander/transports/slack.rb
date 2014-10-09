@@ -3,7 +3,7 @@ require 'slack-notifier'
 module Bystander
   module Transports
     module Slack
-      SETTINGS = [:domain, :username, :auth_token, :channel]
+      SETTINGS = [:domain, :username, :auth_token, :channel, :prepend]
 
       SETTINGS.each do |setting|
         define_singleton_method(setting) do |*args|
@@ -13,11 +13,14 @@ module Bystander
       end
 
       def self.slack
-        @slack ||= ::Slack::Notifier.new domain, auth_token, channel: channel, username: username
+        @slack ||= ::Slack::Notifier.new(domain, auth_token).tap { |slack|
+          slack.channel = channel
+          slack.username = username
+        }
       end
 
       def self.notify message
-        slack.ping message
+        slack.ping "_#{prepend}_ `#{message}`"
       end
 
       def self.configure
