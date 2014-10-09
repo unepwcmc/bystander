@@ -56,6 +56,10 @@ module Bystander
     end
   end
 
+  def self.log message
+    transport.notify message
+  end
+
   def self.transport
     @transport ||= Bystander::Transports::Slack
   end

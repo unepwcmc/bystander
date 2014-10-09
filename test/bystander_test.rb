@@ -30,4 +30,11 @@ class BystanderTest < MiniTest::Test
     Bystander.transport.expects(:notify).with("Finished: TestObject::classest_of_methods([])")
     TestObject.classest_of_methods
   end
+
+  def test_log_notifies_the_transport_with_given_message
+    message = 'I just logged something'
+    Bystander.transport.expects(:notify).with(message)
+
+    Bystander.log message
+  end
 end
