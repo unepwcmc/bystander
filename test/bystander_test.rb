@@ -1,19 +1,15 @@
 require 'test_helper'
 
-class TestObject
-  include Bystander
-
-  def manbonify an_arg
-    "fake return value"
-  end
-
-  def self.classest_of_methods
-  end
-end
+class TestObject < Object; end;
 
 class BystanderTest < MiniTest::Test
   def test_notify_notifies_before_and_after_method
-    TestObject.notify [:manbonify]
+    TestObject.class_eval do
+      include Bystander
+      notify [:manbonify]
+      define_method(:manbonify) {|an_arg| "fake return value" }
+    end
+
     object = TestObject.new
 
     Bystander.transport.expects(:notify).with("Calling: TestObject#manbonify([\"yo\"])")
@@ -24,7 +20,12 @@ class BystanderTest < MiniTest::Test
   end
 
   def test_notify_notifies_before_and_after_class_method
-    TestObject.notify [:classest_of_methods]
+    TestObject.class_eval do
+      include Bystander
+      notify [:classest_of_methods]
+      define_singleton_method(:classest_of_methods){}
+    end
+
     Bystander.transport.expects(:notify).with("Calling: TestObject::classest_of_methods([])")
     Bystander.transport.expects(:notify).with("Finished: TestObject::classest_of_methods([])")
     TestObject.classest_of_methods

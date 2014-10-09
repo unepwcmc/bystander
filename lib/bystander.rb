@@ -7,20 +7,35 @@ module Bystander
   end
 
   module ClassMethods
+    @@methods_to_notify = []
+    @@redefined_methods = []
+
     def notify methods
-      methods.each{ |method| wrap_method(method) }
+      @@methods_to_notify = methods
+    end
+
+    def method_added method
+      if notify?(method) && !redefined?(method)
+        @@redefined_methods << method
+        wrap_instance_method instance_method(method)
+      end
+    end
+
+    def singleton_method_added method
+      if notify?(method) && !redefined?(method)
+        @@redefined_methods << method
+        wrap_class_method method(method)
+      end
     end
 
     private
 
-    def wrap_method method_name
-      original_method = method(method_name) rescue instance_method(method_name)
+    def notify? method
+      @@methods_to_notify.include? method
+    end
 
-      if original_method.is_a? UnboundMethod
-        wrap_instance_method original_method
-      else
-        wrap_class_method original_method
-      end
+    def redefined? method
+      @@redefined_methods.include? method
     end
 
     def wrap_instance_method method
