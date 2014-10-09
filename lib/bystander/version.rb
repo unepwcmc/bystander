@@ -1,3 +1,3 @@
-module Observer
+module Bystander
   VERSION = "1"
 end

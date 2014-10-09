@@ -1,4 +1,4 @@
-module Observer
+module Bystander
   module Transports
     class Slack
 

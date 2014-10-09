@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    observer (1)
+    bystander (1)
 
 GEM
   remote: https://rubygems.org/
@@ -16,7 +16,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bystander!
   minitest
   mocha
-  observer!
   rake

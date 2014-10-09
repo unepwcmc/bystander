@@ -1,7 +1,7 @@
-require 'observer/notifier'
-require 'observer/transports/slack'
+require 'bystander/notifier'
+require 'bystander/transports/slack'
 
-module Observer
+module Bystander
   def self.included base
     base.extend ClassMethods
   end
@@ -25,7 +25,7 @@ module Observer
 
     def wrap_instance_method method
       define_method(method.name) do |*args, &block|
-        Observer::Notifier.wrap("#{self.class.to_s}##{method.name}(#{args.inspect})") do
+        Bystander::Notifier.wrap("#{self.class.to_s}##{method.name}(#{args.inspect})") do
           method.bind(self).call(*args, &block)
         end
       end
@@ -33,7 +33,7 @@ module Observer
 
     def wrap_class_method method
       define_singleton_method(method.name) do |*args, &block|
-        Observer::Notifier.wrap("#{self.to_s}::#{method.name}(#{args.inspect})") do
+        Bystander::Notifier.wrap("#{self.to_s}::#{method.name}(#{args.inspect})") do
           method.call(*args, &block)
         end
       end
@@ -41,7 +41,7 @@ module Observer
   end
 
   def self.transport
-    @transport ||= Observer::Transports::Slack
+    @transport ||= Bystander::Transports::Slack
   end
 
   def self.transport= transport

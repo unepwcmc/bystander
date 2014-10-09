@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 gemspec
 
-gem "minitest"
-gem "mocha"
+gem 'minitest'
+gem 'mocha'
