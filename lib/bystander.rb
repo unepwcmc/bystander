@@ -1,5 +1,6 @@
 require 'bystander/notifier'
 require 'bystander/transports/slack'
+require 'bystander/util/testing'
 
 module Bystander
   def self.included base
