@@ -12,8 +12,8 @@ class BystanderTest < MiniTest::Test
 
     object = TestObject.new
 
-    Bystander.transport.expects(:notify).with("Calling: TestObject#manbonify([\"yo\"])")
-    Bystander.transport.expects(:notify).with("Finished: TestObject#manbonify([\"yo\"])")
+    Bystander.transport.expects(:notify).with("Calling: TestObject#manbonify(yo)")
+    Bystander.transport.expects(:notify).with("Finished: TestObject#manbonify(yo)")
 
     return_value = object.manbonify "yo"
     assert_equal "fake return value", return_value
@@ -26,8 +26,8 @@ class BystanderTest < MiniTest::Test
       define_singleton_method(:classest_of_methods){}
     end
 
-    Bystander.transport.expects(:notify).with("Calling: TestObject::classest_of_methods([])")
-    Bystander.transport.expects(:notify).with("Finished: TestObject::classest_of_methods([])")
+    Bystander.transport.expects(:notify).with("Calling: TestObject::classest_of_methods()")
+    Bystander.transport.expects(:notify).with("Finished: TestObject::classest_of_methods()")
     TestObject.classest_of_methods
   end
 

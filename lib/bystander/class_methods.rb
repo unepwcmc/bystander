@@ -36,7 +36,7 @@ module Bystander
 
     def wrap_instance_method method
       define_method(method.name) do |*args, &block|
-        Bystander::Notifier.wrap("#{self.class.to_s}##{method.name}(#{args.inspect})") do
+        Bystander::Notifier.wrap("#{self.class.to_s}##{method.name}(#{args.join(', ')})") do
           method.bind(self).call(*args, &block)
         end
       end
@@ -44,7 +44,7 @@ module Bystander
 
     def wrap_class_method method
       define_singleton_method(method.name) do |*args, &block|
-        Bystander::Notifier.wrap("#{self.to_s}::#{method.name}(#{args.inspect})") do
+        Bystander::Notifier.wrap("#{self.to_s}::#{method.name}(#{args.join(', ')})") do
           method.call(*args, &block)
         end
       end
