@@ -41,8 +41,8 @@ Whenever this method is called, Bystander will log the call and the
 return:
 
 ```
-Calling: MaintenanceHandler::under_maintenance([])
-Finished: MaintenanceHandler::under_maintenance([])
+Calling: MaintenanceHandler::under_maintenance()
+Finished: MaintenanceHandler::under_maintenance()
 ```
 
 #### Manual Logging
