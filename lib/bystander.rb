@@ -1,5 +1,6 @@
 require 'bystander/transports/slack'
 require 'bystander/class_methods'
+require 'bystander/configuration'
 
 module Bystander
   def self.included base
