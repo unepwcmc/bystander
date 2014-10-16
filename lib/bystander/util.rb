@@ -7,5 +7,9 @@ module Bystander
         tr("-", "_").
         downcase
     end
+
+    def self.classify_string string
+      string.split('_').collect(&:capitalize).join
+    end
   end
 end

@@ -1,3 +1,5 @@
+Dir[File.join(File.dirname(__FILE__), 'hooks/*')].each(&method(:require))
+
 module Bystander
   class Actor
     attr_accessor :scene, :entity
@@ -17,6 +19,9 @@ module Bystander
     end
 
     def add_hook method, type, configuration
+      hook_class = Bystander::Util.classify_string(type.to_s)
+
+      entity.include "Bystander::Hooks::#{hook_class}".constantize
       entity.send type, method, configuration
     end
   end
