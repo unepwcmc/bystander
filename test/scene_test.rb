@@ -19,11 +19,23 @@ class SceneTest < MiniTest::Test
 
     acts_mock = mock
     acts_mock.expects(:add).twice
-    Bystander::ActsHash.stubs(:new).returns(acts_mock)
+    Bystander::ActsHash.expects(:new).with(scene).returns(acts_mock)
 
     scene.acts do
       add :actor, :method
       add :another_actor, :another_method
     end
+  end
+
+  def test_load_hooks_calls_load_hooks_on_all_its_acts
+    scene = Bystander::Scene.new('test_scene')
+    act_mock_1 = mock
+    act_mock_1.expects(:load_hooks)
+    act_mock_2 = mock
+    act_mock_2.expects(:load_hooks)
+
+    scene.acts[:act_mock_1] = act_mock_1
+    scene.acts[:act_mock_2] = act_mock_2
+    scene.load_hooks
   end
 end
