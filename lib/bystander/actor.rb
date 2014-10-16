@@ -21,7 +21,7 @@ module Bystander
     def add_hook method, type, configuration
       hook_class = Bystander::Util.classify_string(type.to_s)
 
-      entity.include "Bystander::Hooks::#{hook_class}".constantize
+      entity.include Kernel.const_get("Bystander::Hooks::#{hook_class}")
       entity.send type, method, configuration
     end
   end

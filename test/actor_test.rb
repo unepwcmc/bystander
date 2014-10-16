@@ -13,6 +13,7 @@ class ActorTest < MiniTest::Test
 
   def test_add_hook_calls_the_hook_method_on_the_entity
     class_mock = mock
+    class_mock.stubs(:include)
     class_mock.expects(:notify).with(:method, :wrap)
 
     actor = Bystander::Actor.new class_mock
