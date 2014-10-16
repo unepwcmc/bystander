@@ -1,4 +1,6 @@
 require 'bystander/transports/slack'
+require 'bystander/transports/dev_null'
+
 require 'bystander/configuration'
 
 module Bystander

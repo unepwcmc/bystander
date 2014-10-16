@@ -25,11 +25,11 @@ module Bystander::Hooks::Notify::ClassMethods
 
   def wrap_instance_method method
     define_method(method.name) do |*args, &block|
-      method_identifier = Bystander::Util.instance_method_identifier(
+      identifier = Bystander::Util.instance_method_identifier(
         self, method, args
       )
 
-      Bystander::Notifier.wrap(method_identifier) do
+      Bystander::Notifier.wrap(identifier) do
         method.bind(self).call(*args, &block)
       end
     end
@@ -37,11 +37,11 @@ module Bystander::Hooks::Notify::ClassMethods
 
   def wrap_class_method method
     define_singleton_method(method.name) do |*args, &block|
-      method_identifier = Bystander::Util.class_method_identifier(
+      identifier = Bystander::Util.class_method_identifier(
         self, method, args
       )
 
-      Bystander::Notifier.wrap(method_identifier) do
+      Bystander::Notifier.wrap(identifier) do
         method.call(*args, &block)
       end
     end
