@@ -20,11 +20,12 @@ module Bystander
       end
 
       def self.notify message
-        slack.ping "_#{prepend}_ `#{message}`"
+        formatted_message = "```#{message}```"
+        slack.ping [prepend, formatted_message].compact.join("\n")
       end
 
-      def self.configure
-        yield self
+      def self.configure &block
+        self.instance_eval &block
       end
 
     end
