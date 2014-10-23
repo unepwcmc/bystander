@@ -9,15 +9,6 @@ module Bystander
       self.scene = scene
     end
 
-    def include_bystander
-      return false if bystander_included?
-      entity.include(Bystander)
-    end
-
-    def bystander_included?
-      entity.include? Bystander
-    end
-
     def add_hook method, type, configuration
       hook_class = Bystander::Util.hook_class(type)
       hook = hook_class.new self

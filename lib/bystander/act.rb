@@ -9,8 +9,6 @@ module Bystander
     end
 
     def load_hooks
-      actor.include_bystander
-
       hooks.each do |type, configuration|
         actor.add_hook method, type, configuration
       end

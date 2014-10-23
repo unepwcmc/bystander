@@ -9,12 +9,11 @@ class ActTest < MiniTest::Test
     assert_equal({notify: :wrap}, act.hooks)
   end
 
-  def test_load_hooks_includes_bystander_in_actor_and_adds_acts_hooks_to_the_actor
+  def test_load_hooks_adds_acts_hooks_to_the_actor
     ensure_lambda = -> {}
     hooks = {notify: :wrap, ensure: ensure_lambda}
 
     actor_mock = mock
-    actor_mock.expects(:include_bystander)
     actor_mock.expects(:add_hook).with(:method, :notify, :wrap)
     actor_mock.expects(:add_hook).with(:method, :ensure, ensure_lambda)
 
