@@ -17,11 +17,17 @@ module Bystander
     end
 
     def self.instance_method_identifier base, method, args
-      "#{base.class.name}##{method.name}(#{args.join(', ')})"
+      "#{base.name}##{method.name}(#{args.join(', ')})"
     end
 
     def self.identify_method base, method_sym
       base.method method_sym rescue base.instance_method method_sym
+    end
+
+    def self.hook_class hook_name
+      Kernel.const_get("Bystander::Hooks::#{classify_string(hook_name.to_s)}")
+    rescue NameError
+      raise Bystander::HookNotFoundError, hook_name
     end
   end
 end

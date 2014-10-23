@@ -11,12 +11,13 @@ class ActorTest < MiniTest::Test
     assert_nil actor_without_scene.scene
   end
 
-  def test_add_hook_calls_the_hook_method_on_the_entity
-    class_mock = mock
-    class_mock.stubs(:include)
-    class_mock.expects(:notify).with(:method, :wrap)
+  def test_add_hook_creates_and_mounts_the_hook
+    hook_mock = mock
+    hook_mock.expects(:mount)
+    actor = Bystander::Actor.new Object
 
-    actor = Bystander::Actor.new class_mock
+    Bystander::Hooks::Notify.expects(:new).with(actor).returns(hook_mock)
+
     actor.add_hook :method, :notify, :wrap
   end
 end

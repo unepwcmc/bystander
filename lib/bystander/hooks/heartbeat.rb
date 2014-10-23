@@ -1,60 +1,35 @@
+require 'bystander/hooks/base'
+require 'bystander/heartbeater'
+
 module Bystander
   module Hooks
-    module Heartbeat
-      def self.included base
-        base.extend ClassMethods
+    class Heartbeat < Bystander::Hooks::Base
+
+      def mount method_sym, configuration={every: 60, block: -> {}}
+        wrap_method(method_sym, configuration)
       end
 
-      def self.start identifier, configuration
-        Thread.new{
-          while true do
-            sleep configuration[:every]
-            Bystander.transport.notify(
-              "``\nHeartbeat from #{identifier} \n>  #{configuration[:block].call}``"
-            )
-          end
-        }
+      protected
+
+      def wrap_instance_method method, configuration
+        method_identifier = instance_method_identifier(method)
+
+        actor.entity.send(:define_method, method.name) do |*args, &block|
+          Bystander::Heartbeater.wrap(method_identifier.call(args), configuration) {
+            method.bind(self).call(*args, &block)
+          }
+        end
       end
-    end
-  end
-end
 
-module Bystander::Hooks::Heartbeat::ClassMethods
-  def heartbeat method_sym, configuration={}
-    method = Bystander::Util.identify_method(self, method_sym)
+      def wrap_class_method method, configuration
+        method_identifier = class_method_identifier(method)
 
-    if method.is_a? UnboundMethod
-      wrap_instance_method method, configuration
-    else
-      wrap_class_method method, configuration
-    end
-  end
-
-  private
-
-  def wrap_instance_method method, configuration
-    define_method(method.name) do |*args, &block|
-      identifier = Bystander::Util.instance_method_identifier(
-        self, method, args
-      )
-      thread = Bystander::Hooks::Heartbeat.start(identifier, configuration)
-      return_value = method.bind(self).call(*args, &block)
-
-      thread.kill
-      return_value
-    end
-  end
-
-  def wrap_class_method method, configuration
-    define_singleton_method(method.name) do |*args, &block|
-      identifier = Bystander::Util.class_method_identifier(
-        self, method, args
-      )
-      thread = Bystander::Hooks::Heartbeat.start(identifier, configuration)
-      return_value = method.call(*args, &block)
-
-      thread.kill
-      return_value
+        actor.entity.send(:define_singleton_method, method.name) do |*args, &block|
+          Bystander::Heartbeater.wrap(method_identifier.call(args), configuration) {
+            method.call(*args, &block)
+          }
+        end
+      end
     end
   end
 end
