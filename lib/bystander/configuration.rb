@@ -35,6 +35,6 @@ module Bystander
       acts[scene_prefix.call(name)] = act
     end
 
-    scene.load_hooks
+    scene.load_hooks unless Bystander.testing?
   end
 end

@@ -34,4 +34,21 @@ class ConfigurationTest < MiniTest::Test
     assert_equal({test__an_actor: actor_mock}, Bystander.actors)
     assert_equal({test__an_act: act_mock}, Bystander.acts)
   end
+
+  def test_scene_doesnt_load_hooks_if_bystander_testing
+    scene_name = 'test'
+    actor_mock = mock
+    act_mock = mock
+
+    scene_mock = mock
+    scene_mock.stubs(:name).returns(scene_name)
+    scene_mock.stubs(:actors).returns({an_actor: actor_mock})
+    scene_mock.stubs(:acts).returns({an_act: act_mock})
+    scene_mock.expects(:load_hooks).never
+
+    Bystander.stubs(:testing?).returns(true)
+    Bystander::Scene.stubs(:new).returns(scene_mock)
+
+    Bystander.scene(scene_name) {}
+  end
 end
