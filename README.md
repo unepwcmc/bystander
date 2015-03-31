@@ -23,26 +23,38 @@ transport method (warning: you're gonna have to write some code).
 
 #### Automatic Logging
 
-At the top of the class containing the methods you want to log, include
-the `Bystander` module and tell it what methods you're interested in.
+Bystander consists of a DSL that allows you to define what method calls
+you want to listen to. The concept is simple:
+
+* You have one or more `Scene`s, which match to a process (such as
+  importing a file)
+* Each `Scene` consists of one or more `Actor`s, which define the
+  classes that will be taking part in the process.
+* Each `Scene` consists of one or more `Act`s, which define what methods
+  to listen to.
 
 ```ruby
-class MaintenanceHandler
-  include Bystander
-  notify [:under_maintenance]
+Bystander.scene('import') do
+  actors do
+    add Download
+  end
 
-  def under_maintenance
-    #...
+  acts do
+    add :download, :make_current, notify: :wrap
   end
 end
 ```
 
-Whenever this method is called, Bystander will log the call and the
+An act has two types of notifiers: `wrap` and `before`. `wrap` notifies
+your transport before and after the method is called, whereas `before`
+only notifies as the method is called.
+
+Whenever the methods are called, Bystander will log the call and the
 return:
 
 ```
-Calling: MaintenanceHandler::under_maintenance()
-Finished: MaintenanceHandler::under_maintenance()
+Calling: Download#make_current
+Finished: Download#make_current
 ```
 
 #### Manual Logging
