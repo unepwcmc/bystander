@@ -75,10 +75,9 @@ block (e.g., in a Rails initializer):
 
 ```ruby
 Bystander::Transports::Slack.configure do |slack|
-  slack.domain      'wcmc'
-  slack.username    'Bystander'
-  slack.auth_token  ENV['SLACK_AUTH_TOKEN']
-  slack.channel     '#bystander'
+  slack.username     'Bystander'
+  slack.webhook_url  ENV['SLACK_WEBHOOK_URL']
+  slack.channel      '#bystander'
 
   # Prepend all messages with this string. Useful for env info, etc.
   slack.prepend     "#{ENV['RAILS_ENV']} - (##{Process.pid}):"
@@ -94,3 +93,29 @@ disable Bystander, preface your test code (for example, in your
 ```
 Bystander.enable_testing!
 ```
+
+## Upgrading to 2.0
+
+You might be here to check what the heck is changing in version 2.0. 
+Luckily enough, almost nothing: we are upgrading the `slack-notifier`
+dependency, and this needs us to change the Slack configuration a little bit.
+
+So, if you have this:
+```ruby
+Bystander::Transports::Slack.configure do |slack|
+  slack.domain       'unepwcmc'
+  slack.auth_token   ENV['SLACK_AUTH_TOKEN']
+  slack.channel      '#bystander'
+end
+```
+turn it into this:
+```ruby
+Bystander::Transports::Slack.configure do |slack|
+  slack.username     'Bystander'
+  slack.webhook_url  ENV['SLACK_WEBHOOK_URL']
+  slack.channel      '#bystander'
+end
+```
+
+You can get a Slack webhook URL by creating an "Incoming Webhook" integration
+in your team's slack interface. Piece of cake!
