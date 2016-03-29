@@ -3,7 +3,7 @@ require 'slack-notifier'
 module Bystander
   module Transports
     module Slack
-      SETTINGS = [:domain, :username, :auth_token, :channel, :prepend]
+      SETTINGS = [:webhook_url, :username, :channel, :prepend]
 
       SETTINGS.each do |setting|
         define_singleton_method(setting) do |*args|
@@ -13,7 +13,7 @@ module Bystander
       end
 
       def self.slack
-        @slack ||= ::Slack::Notifier.new(domain, auth_token).tap { |slack|
+        @slack ||= ::Slack::Notifier.new(webhook_url).tap { |slack|
           slack.channel = channel
           slack.username = username
         }

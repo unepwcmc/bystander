@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'mocha'
 
-  gem.add_dependency 'slack-notifier', '~> 0.6.0'
+  gem.add_dependency 'slack-notifier', '~> 1.5.1'
 end

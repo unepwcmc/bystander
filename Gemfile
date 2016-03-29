@@ -4,4 +4,4 @@ gem 'rake'
 gem 'minitest'
 gem 'mocha'
 
-gem 'slack-notifier'
+gem 'slack-notifier', '~> 1.5.1'
